@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+def isLocalBuild = project.file('../local.properties').exists()
+
+android {
+	compileSdkVersion 28
+
+	defaultConfig {
+		applicationId "com.mlykotom.example_arch_viewmodel"
+		minSdkVersion 14
+		targetSdkVersion 28
+		versionCode 1
+		versionName "1.0"
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+
+	dataBinding {
+		enabled = true
+	}
+}
+
+dependencies {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+	implementation 'androidx.appcompat:appcompat:1.1.0'
+	implementation 'com.google.android.material:material:1.0.0'
+
+	implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
+
+	debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+	releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+	testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+
+	if (isLocalBuild) {
+		implementation project(':valifi')
+	} else {
+		implementation 'com.mlykotom:valifi:1.5.0'
+	}
+}
