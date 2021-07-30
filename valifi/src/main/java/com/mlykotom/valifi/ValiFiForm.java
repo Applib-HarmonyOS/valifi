@@ -1,119 +1,130 @@
 package com.mlykotom.valifi;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
-
 /**
- * Bundles more fields together and provides validation for all of them + destroying
+ * Bundles more fields together and provides validation for all of them + destroying.
  */
-public class ValiFiForm extends BaseObservable implements ValiFiValidable {
-	private List<ValiFiValidable> mFields = new ArrayList<>();
-	@Nullable private ValiFiForm mParentForm;
 
-	public ValiFiForm(ValiFiValidable... fields) {
-		for (ValiFiValidable field : fields) {
-			addField(field);
-		}
-	}
+public class ValiFiForm implements ValiFiValidable {
+    private List<ValiFiValidable> mFields = new ArrayList<>();
+    @Nullable private ValiFiForm mParentForm;
 
-	/**
-	 * Checks whether all bundled fields are valid
-	 *
-	 * @return If any field is not valid = false
-	 */
-	@Bindable
-	@Override
-	public boolean isValid() {
-		for (ValiFiValidable field : mFields) {
-			if (!field.isValid()) return false;
-		}
+    /**
+     * Constructor for ValiFiForm.
+     *
+     * @param fields Various ValiFi validators
+     */
+    public ValiFiForm(ValiFiValidable... fields) {
+        for (ValiFiValidable field : fields) {
+            addField(field);
+        }
+    }
 
-		return true;
-	}
+    /**
+     * Checks whether all bundled fields are valid.
+     *
+     * @return If any field is not valid = false
+     */
+    @Override
+    public boolean isValid() {
+        for (ValiFiValidable field : mFields) {
+            if (!field.isValid()) {
+                return false;
+            }
+        }
 
-	/**
-	 * Clears used resources by this form + clears validated field's resources.
-	 * Should be called after done working with form and fields
-	 */
-	public void destroy() {
-		for (ValiFiValidable field : mFields) {
-			field.destroy();
-		}
+        return true;
+    }
 
-		mFields.clear();
-		mParentForm = null;
-	}
+    @Override
+    public void init() {
+        for (ValiFiValidable field : mFields) {
+            field.init();
+        }
+    }
 
-	@Override
-	public void reset() {
-		for (ValiFiValidable field : mFields) {
-			field.reset();
-		}
-	}
 
-	/**
-	 * Notifies about error all fields in the form
-	 *
-	 * @see ValiFieldBase#validate()
-	 */
-	@Override
-	public void validate() {
-		for (ValiFiValidable field : mFields) {
-			field.validate();
-		}
-	}
+    /**
+     * Clears used resources by this form + clears validated field's resources.
+     * Should be called after done working with form and fields
+     */
+    public void destroy() {
+        for (ValiFiValidable field : mFields) {
+            field.destroy();
+        }
 
-	/**
-	 * Adds field to this form so can be validated with others
-	 *
-	 * @param field to be validated through this form
-	 */
-	public void addField(ValiFiValidable field) {
-		field.setFormValidation(this);
-		mFields.add(field);
-	}
+        mFields.clear();
+        mParentForm = null;
+    }
 
-	/**
-	 * Notifies about error all fields in the form
-	 *
-	 * @see ValiFieldBase#refreshError()
-	 */
-	@Override
-	public void refreshError() {
-		for (ValiFiValidable field : mFields) {
-			field.refreshError();
-		}
-	}
+    @Override
+    public void reset() {
+        for (ValiFiValidable field : mFields) {
+            field.reset();
+        }
+    }
 
-	/**
-	 * Field validation was changed and informs this form about it
-	 *
-	 * @param field which was changed (ignored and handled by observable callback)
-	 */
-	@SuppressWarnings("unused")
-	void notifyValidationChanged(ValiFiValidable field) {
-		notifyPropertyChanged(com.mlykotom.valifi.BR.valid);
-		if (mParentForm != null) {
-			mParentForm.notifyValidationChanged(this);
-		}
-	}
+    /**
+     * Notifies about error all fields in the form.
+     *
+     * @see ValiFieldBase#validate()
+     */
+    @Override
+    public void validate() {
+        for (ValiFiValidable field : mFields) {
+            field.validate();
+        }
+    }
 
-	/**
-	 * Bundles this form to another form
-	 *
-	 * @param form which validates all bundled fields
-	 */
-	@Override
-	public void setFormValidation(@Nullable ValiFiForm form) {
-		mParentForm = form;
-	}
+    /**
+     * Adds field to this form so can be validated with others.
+     *
+     * @param field to be validated through this form
+     */
+    public void addField(ValiFiValidable field) {
+        field.setFormValidation(this);
+        mFields.add(field);
+    }
 
-	@Nullable
-	public ValiFiForm getBoundForm() {
-		return mParentForm;
-	}
+    /**
+     * Notifies about error all fields in the form.
+     *
+     * @see ValiFieldBase#refreshError()
+     */
+    @Override
+    public void refreshError() {
+        for (ValiFiValidable field : mFields) {
+            field.refreshError();
+        }
+    }
+
+    /**
+     * Field validation was changed and informs this form about it.
+     *
+     * @param field which was changed (ignored and handled by observable callback)
+     */
+    @SuppressWarnings("unused")
+    void notifyValidationChanged(ValiFiValidable field) {
+        if (mParentForm != null) {
+            mParentForm.notifyValidationChanged(this);
+        }
+    }
+
+    /**
+     * Bundles this form to another form.
+     *
+     * @param form which validates all bundled fields
+     */
+    @Override
+    public void setFormValidation(@Nullable ValiFiForm form) {
+        mParentForm = form;
+    }
+
+    @Nullable
+    public ValiFiForm getBoundForm() {
+        return mParentForm;
+    }
 }
