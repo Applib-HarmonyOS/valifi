@@ -1,51 +1,43 @@
+
 # ValiFi
 
-[![Download](https://api.bintray.com/packages/mlykotom/maven/valifi/images/download.svg)](https://bintray.com/mlykotom/maven/valifi/_latestVersion)
-[![Build Status](https://travis-ci.org/mlykotom/valifi.svg?branch=master)](https://travis-ci.org/mlykotom/valifi)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ValiFi-blue.svg?style=flat)](https://android-arsenal.com/details/1/5153)
-[![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=14)
+* __ValiFi__ is an ohos library for validating fields or whole forms. 
+* The validations are visible immediately when the user adds input. 
+* It's highly customizable and simple to use.
 
-* __ValiFi__ is android library for validating fields or whole forms. 
-* It's working with __data binding__ and validations are visible immediately when user adds input. 
-* It's highly customizable and simple for use.
-* works with kotlin
+# Source
+The library was inspired from the Android Library: [ValiFi](https://github.com/mlykotom/valifi/) (version 1.5.0)
 
-<img src="https://raw.githubusercontent.com/mlykotom/valifi/master/graphics/example-single.gif" width="30%" />  <img src="https://raw.githubusercontent.com/mlykotom/valifi/master/graphics/example-form.gif" width="30%" />
+## Features
+The library supports rapid and customizable form validation such that the validations are visible immediately as the user adds input. It supports validation for Numeric, Phone Number, Email, Regex, Date, Credit Card, and Minimum/Maximum/Range character length. The validators can also be customized as required.
 
-# Features
-* predefined fields (password, email, username, ..)
-* forms for lots of fields
-* custom and asynchronous validations
-* option for own fields
-
-# How to use
-
-## Initialize the library
-
-#### 1. Add gradle dependency
-```groovy
-implementation 'com.mlykotom:valifi:1.5.0'
+  
+## Dependency
+1. For using ValiFi module in sample app, include the source code and add the below dependencies in entry/build.gradle to generate hap/support.har.
 ```
-#### 2. Setup project with data binding 
-``` groovy
-android{
-    ...
-    dataBinding.enabled = true
-    ...
-}
+	dependencies {
+		implementation project(':valifi')
+		testCompile 'junit:junit:4.12'
+	}
 ```
+2. For using ValiFi module in separate application using har file, add the har file in the entry/libs folder and add the dependencies in entry/build.gradle file.
+```
+	dependencies {
+		implementation fileTree(dir: 'libs', include: ['*.har'])
+		testCompile 'junit:junit:4.12'
+	}
 
-#### 3. Install the library in application class
-```java
-public class MyApplication extends Application {
-    @Override
-    public void onCreate() {
-        ValiFi.install(this);
-    }
-}
+```
+3. For using ValiFi from a remote repository in separate application, add the below dependencies in entry/build.gradle file.
+```
+	dependencies {
+		implementation 'dev.applibgroup:valifi:1.0.0'
+        	testCompile 'junit:junit:4.12'
+	}
+
 ```
 
-## Use in your code
+## Usage
 
 
 #### 1. Create field you want to validate
@@ -53,52 +45,173 @@ public class MyApplication extends Application {
 public final ValiFieldEmail email = new ValiFieldEmail();
 ```
 
-#### 2. Use it from layout
-Library uses two-way data binding so be careful of adding android:text="__@=__{...}"
+#### 2. Initialize via Java
 
-```xml
-<android.support.design.widget.TextInputLayout
-    ...
-    app:errorEnabled="true"
-    app:error="@{viewModel.email.error}">
+For initialization of a single validator:
+```java
+public final ValiFieldEmail email = new ValiFieldEmail();
+email.setTextField(textfield_email);
+email.setErrorText(errortext_email);
+email.init()
 
-    <android.support.design.widget.TextInputEditText
-        ... 
-        android:text="@={viewModel.email.value}"
-        android:hint="E-mail address" />
-</android.support.design.widget.TextInputLayout>
-
-...
-
-<Button
-    ...
-    android:enabled="@{viewModel.email.valid}"
-    android:text="Submit" />
+if(email.isValid())
+	// do something
 ```
 
-#### 3. Destroy the field
-In order to prevent leaks, field __must__ be destroyed before destroying the screen!
+For multiple validators use a form:
 
-This is easily done by calling:
 ```java
-@Override
-public void onDestroy() {
-	email.destroy();
-	super.onDestroy();
+public final ValiFieldEmail email = new ValiFieldEmail();
+public final ValiFieldPassword password = new ValiFieldPassword();
+public final ValiFiForm form = new ValiFiForm(email, password, phone, ...);
+
+email.setTextField(textfield_email);
+email.setErrorText(errortext_email);
+password.setTextField(textfield_password);
+password.setErrorText(errortext_password);
+
+form.init()
+
+if(form.isValid())
+	// do something
+```
+
+When a user types their e-mail, it will automatically validate the input entered in the TextField `textfield_email` and show the error in Text `errortext_email`. The `init()` method needs to be called after setting the corresponding error text and text field for live validator to initialize. 
+
+The `isValid()` can be used to check explicitly for validity, say when clicking on submit button. 
+
+## Pre-Defined Validators
+
+### Base
+-   addVerifyFieldValidator
+-   addCustomValidator
+
+### ValiFieldText
+-   addExactLengthValidator
+-   addMaxLengthValidator
+-   addMinLengthValidator
+-   addNotEmptyValidator
+-   addPaternValidator
+-   addRangeLengthValidator
+
+## Customization
+
+### Global Resource Customization
+
+```java
+public class MyApplication extends AbilityPackage{
+    @Override
+    public void onInitialize() {
+	    super.onInitialize();
+		ValiFi.install(getContext(), 
+			new ValiFi.Builder()
+				.setErrorResource(ValiFi.Builder.ERROR_RES_EMAIL, R.string.my_custom_email_error)
+				.setPattern(ValiFi.Builder.PATTERN_EMAIL, Patterns.EMAIL_ADDRESS)
+				.build()
+		);
+    }
 }
 ```
-#### That's it! 
 
-When user types his e-mail, it will automatically validates input and enables/disables submit button.
+### Custom Validators
 
-# For customizations information visit [Wiki](https://github.com/mlykotom/valifi/wiki)
+Custom validation can be achieved by using `addCustomValidator()` to override the `isValid()` function.
+
+```java
+public final ValiFieldText fieldWithDifferentValidations = new ValiFieldText();
+
+fieldWithDifferentValidations
+	.addRangeLengthValidator(3, 10)
+	.setEmptyAllowed(true)
+	.addCustomValidator("custom not valid", new ValiFieldBase.PropertyValidator<String>() {
+		@Override
+		public boolean isValid(@Nullable String value) {
+			return whenThisIsValid;
+		}
+	});
+```
+### Global Custom Validation
+
+If you want to use your custom validation across all application, just inherit base field and add your app logic.
+
+```java
+public class MyValiFieldCaptcha extends ValiFieldText {
+	public MyValiFieldCaptcha() {
+		super();
+		addMyValidator();
+	}
 
 
-# App Examples
+	public MyValiFieldCaptcha(String defaultValue) {
+		super(defaultValue);
+		addMyValidator();
+	}
 
-1. MVVM approach (__preferred__) [here](https://github.com/mlykotom/valifi/tree/master/example-arch-viewmodel)
-2. Classic fragment approach [here](https://github.com/mlykotom/valifi/tree/master/example-android)
-3. __[deprecated + removed]__ MVVM approach [here](https://github.com/mlykotom/valifi/tree/b540b1fe480fcdec6fdee9816b79e862882d5835/example-viewmodel)
+
+	private void addMyValidator() {
+		addCustomValidator("Captcha must be correct", new PropertyValidator<String>() {
+			@Override
+			public boolean isValid(@Nullable String value) {
+				// custom validation rule
+				return "captcha".equals(value);
+			}
+		});
+	}
+}
+```
+  
+  ### Credit Cards
+For validating credit cards numbers, one can use class  `ValiFieldCard`.
+
+It will be checking if input:
+
+-   is parseable number
+-   passes Luhn algorithm test
+-   is among known card types
+
+Known types are defaultly set as:
+
+-   MASTERCARD
+-   AMERICAN_EXPRESS
+-   VISA
+-   DISCOVER
+-   DINERS_CLUB
+-   JCB
+
+It is possible to override the settings when installing the library:
+
+```java
+ValiFi.install(this, new ValiFi.Builder()
+	.setKnownCardTypes(new ValiFiCardType("My custom card", "REGEX_FOR_VALIDATION"))
+	.build()
+);
+```
+
+### Numeric Validation
+
+For number validation, one can use abstract class  `ValiFieldNumber<Type>`  which will be forced to implement  `parse(String value)`  method for getting number from string.
+
+Already implemented classes are Long, Integer, and Double. This field adds possibility of adding number validators:
+
+```java
+final long requiredMinNumber = 13;
+numLong.addNumberValidator("This number must be greater than 13", new ValiFieldNumber.NumberValidator<Long>() {
+	@Override
+	public boolean isValid(@NonNull Long value) {
+		return value > requiredMinNumber;
+	}
+});
+```
+
+And if input is not parseable then it will set as invalid without the need of specifying the parser.
+
+## Sample
+
+A sample app with some use cases of the library is available on this [link](entry/) .
+
+## Future work
+
+Future work would include implementing similar live validation functionality via data binding.
 
 # License
     Copyright 2018 Tomas Mlynaric

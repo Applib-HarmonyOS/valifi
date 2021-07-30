@@ -1,108 +1,22 @@
-final VERSION_MAJOR = 1 // max two digits
-final VERSION_MINOR = 5 // max two digits
-final VERSION_PATCH = 0 // max two digits
-final VERSION_BUILD = 0 // max three digits
-
-apply plugin: 'com.android.library'
-// whether the project is built on dev machine or CI
-def isLocalBuild = project.file('../local.properties').exists()
-
-ext {
-	bintrayRepo = 'maven'
-	bintrayName = 'valifi'
-
-	publishedGroupId = 'com.mlykotom'
-	libraryName = 'ValiFi'
-	artifact = 'valifi'
-
-	libraryDescription = 'Android validation library for data binding'
-
-	siteUrl = 'https://github.com/mlykotom/valifi'
-	gitUrl = 'https://github.com/mlykotom/valifi.git'
-
-	libraryVersion = "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
-
-	developerId = 'mlykotom'
-	developerName = 'Tomas Mlynaric'
-	developerEmail = 'mlynarict@gmail.com'
-
-	licenseName = 'The Apache Software License, Version 2.0'
-	licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-	allLicenses = ["Apache-2.0"]
-}
-
-android {
-	compileSdkVersion 28
-
-	defaultConfig {
-		minSdkVersion 14
-		targetSdkVersion 28
-		versionCode VERSION_MAJOR * 10000000 + VERSION_MINOR * 100000 + VERSION_PATCH * 1000 + VERSION_BUILD
-		versionName "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
-	}
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-		}
-	}
-
-	dataBinding.enabled = true
-
-	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_7
-		targetCompatibility JavaVersion.VERSION_1_7
-	}
-
-	testOptions {
-		unitTests.all {
-			testLogging {
-				events "passed", "skipped", "failed", "standardOut", "standardError"
-				outputs.upToDateWhen {false}
-				showStandardStreams = true
-			}
-		}
-	}
+apply plugin: 'com.huawei.ohos.library'
+ohos {
+    compileSdkVersion 5
+    defaultConfig {
+        compatibleSdkVersion 5
+    }
+    buildTypes {
+        release {
+            proguardOpt {
+                proguardEnabled false
+                rulesFiles 'proguard-rules.pro'
+            }
+        }
+    }
+    
 }
 
 dependencies {
-	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation 'com.google.android.material:material:1.0.0'
-	testImplementation 'junit:junit:4.12'
-}
-
-if (isLocalBuild) {
-	android.libraryVariants.configureEach {variant ->
-		variant.javaCompileProvider.configure {
-			javadoc.classpath += files(it.classpath.files)
-		}
-	}
-
-	apply from: "./install.gradle"
-	apply from: "./bintray.gradle"
-
-	def version = project.android.defaultConfig.versionName
-	def compilePath = project.ext.publishedGroupId + ":" + project.ext.bintrayName + ":"
-
-	// Task for updating readme file for new version of library
-	tasks.register("updateReadmeFile") {
-		def readme = file('../README.md')
-
-		def updatedReadmeText = readme.text.replaceFirst("implementation '" + compilePath + "[^']+'", "implementation '" + compilePath + version + "'")
-		readme.write(updatedReadmeText)
-	}
-
-	// task for updating example gradle scripts so that it matches the latest version of library
-	tasks.register("updateExamplesLibraryVersion") {
-		['example-android', 'example-arch-viewmodel'].each {
-			def gradleScript = file("../${it}/build.gradle")
-			def updatedGradleText = gradleScript.text.replaceAll("implementation '" + compilePath + "[^']+'", "implementation '" + compilePath + version + "'")
-			gradleScript.write(updatedGradleText)
-		}
-	}
-
-	tasks.named("install").configure {
-		dependsOn tasks.named("updateReadmeFile")
-		dependsOn tasks.named("updateExamplesLibraryVersion")
-	}
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.jetbrains:annotations:15.0'
+    testImplementation 'junit:junit:4.13'
 }

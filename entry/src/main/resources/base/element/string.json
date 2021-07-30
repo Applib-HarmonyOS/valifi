@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "ValiFi"
+    },
+    {
+      "name": "mainability_description",
+      "value": "Java_Phone_Empty Feature Ability"
+    },
+    {
+      "name": "mainability_HelloWorld",
+      "value": "Hello World"
+    },
+    {
+      "name": "longform_description",
+      "value": "Java_Phone_Empty Feature Ability"
+    },
+    {
+      "name": "longform_HelloWorld",
+      "value": "Hello World"
+    }
+  ]
+}
