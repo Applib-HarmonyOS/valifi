@@ -219,7 +219,7 @@ public class ValiFieldText extends ValiFieldBase<String> {
     }
 
     /**
-     * Validates email addresses based on Android's {@link CommonPattern#getEmailAddress()}.
+     * Validates email addresses
      *
      * @param errorMessage specifies error message to be shown
      * @return this, so validators can be chained
