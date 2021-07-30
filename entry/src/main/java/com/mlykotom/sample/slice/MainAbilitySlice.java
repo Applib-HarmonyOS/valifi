@@ -16,10 +16,10 @@
 
 package com.mlykotom.sample.slice;
 
-import com.mlykotom.sample.ResourceTable;
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.content.Intent;
 import ohos.agp.components.Button;
+import com.mlykotom.sample.ResourceTable;
 
 /**
  * Main Ability Slice of sample app.

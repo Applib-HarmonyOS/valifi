@@ -16,9 +16,9 @@
 
 package com.mlykotom.sample;
 
-import com.mlykotom.sample.slice.MainAbilitySlice;
 import ohos.aafwk.ability.Ability;
 import ohos.aafwk.content.Intent;
+import com.mlykotom.sample.slice.MainAbilitySlice;
 
 /**
  * Main Ability of sample app.

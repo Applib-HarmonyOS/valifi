@@ -16,8 +16,8 @@
 
 package com.mlykotom.sample;
 
-import com.mlykotom.valifi.ValiFi;
 import ohos.aafwk.ability.AbilityPackage;
+import com.mlykotom.valifi.ValiFi;
 
 /**
  * Main application class of sample app.

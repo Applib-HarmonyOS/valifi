@@ -1,12 +1,12 @@
 package com.mlykotom.valifi.fields;
 
+import ohos.utils.CommonPattern;
 import com.mlykotom.valifi.ValiFi;
 import com.mlykotom.valifi.ValiFieldBase;
 import com.mlykotom.valifi.exceptions.ValiFiValidatorException;
-import java.util.regex.Pattern;
-import ohos.utils.CommonPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.regex.Pattern;
 
 /**
  * Handles validating on simple string fields.

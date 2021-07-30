@@ -16,12 +16,12 @@
 
 package com.mlykotom.sample;
 
-import com.mlykotom.sample.slice.BasicFormSlice;
 import ohos.aafwk.ability.Ability;
 import ohos.aafwk.content.Intent;
+import com.mlykotom.sample.slice.BasicFormSlice;
 
 /**
- * Test Ability of sample app.
+ * Basic Form Ability of sample app.
  */
 public class BasicForm extends Ability {
     @Override

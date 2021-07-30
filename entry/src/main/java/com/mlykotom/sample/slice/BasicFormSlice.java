@@ -16,24 +16,21 @@
 
 package com.mlykotom.sample.slice;
 
-import com.mlykotom.sample.ResourceTable;
-import com.mlykotom.valifi.ValiFiForm;
-import com.mlykotom.valifi.fields.*;
-import com.mlykotom.valifi.fields.number.ValiFieldLong;
-import com.mlykotom.valifi.fields.number.ValiFieldNumber;
-import java.util.regex.Pattern;
+
 import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.content.Intent;
 import ohos.agp.components.Button;
-import ohos.agp.components.Component;
 import ohos.agp.components.Text;
 import ohos.agp.components.TextField;
 import ohos.agp.window.dialog.ToastDialog;
-import ohos.hiviewdfx.HiLog;
-import ohos.hiviewdfx.HiLogLabel;
+import com.mlykotom.sample.ResourceTable;
+import com.mlykotom.valifi.ValiFiForm;
+import com.mlykotom.valifi.fields.ValiFieldEmail;
+import com.mlykotom.valifi.fields.ValiFieldPassword;
+import com.mlykotom.valifi.fields.ValiFieldPhone;
 
 /**
- * Test Ability Slice of sample app.
+ * Basic Form Ability Slice of sample app.
  */
 public class BasicFormSlice extends AbilitySlice {
 

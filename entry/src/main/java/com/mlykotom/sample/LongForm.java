@@ -16,10 +16,13 @@
 
 package com.mlykotom.sample;
 
-import com.mlykotom.sample.slice.LongFormSlice;
 import ohos.aafwk.ability.Ability;
 import ohos.aafwk.content.Intent;
+import com.mlykotom.sample.slice.LongFormSlice;
 
+/**
+ * Long Form Ability of sample app.
+ */
 public class LongForm extends Ability {
     @Override
     public void onStart(Intent intent) {

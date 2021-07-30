@@ -1,8 +1,8 @@
 package com.mlykotom.valifi;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Bundles more fields together and provides validation for all of them + destroying.

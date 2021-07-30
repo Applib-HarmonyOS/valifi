@@ -1,17 +1,17 @@
 package com.mlykotom.valifi;
 
+import ohos.agp.components.Component;
+import ohos.agp.components.Text;
+import ohos.agp.components.TextField;
 import com.mlykotom.valifi.exceptions.ValiFiException;
 import com.mlykotom.valifi.exceptions.ValiFiValidatorException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-import ohos.agp.components.Component;
-import ohos.agp.components.Text;
-import ohos.agp.components.TextField;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Base class for validation field. Holds value change listener and basic rules for validation.

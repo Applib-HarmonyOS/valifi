@@ -16,6 +16,13 @@
 
 package com.mlykotom.sample.slice;
 
+
+import ohos.aafwk.ability.AbilitySlice;
+import ohos.aafwk.content.Intent;
+import ohos.agp.components.Button;
+import ohos.agp.components.Text;
+import ohos.agp.components.TextField;
+import ohos.agp.window.dialog.ToastDialog;
 import com.mlykotom.sample.ResourceTable;
 import com.mlykotom.valifi.ValiFiForm;
 import com.mlykotom.valifi.fields.ValiFieldCard;
@@ -23,15 +30,11 @@ import com.mlykotom.valifi.fields.ValiFieldDate;
 import com.mlykotom.valifi.fields.ValiFieldText;
 import com.mlykotom.valifi.fields.ValiFieldUsername;
 import com.mlykotom.valifi.fields.number.ValiFieldLong;
-import ohos.aafwk.ability.AbilitySlice;
-import ohos.aafwk.content.Intent;
-import ohos.agp.components.Button;
-import ohos.agp.components.Text;
-import ohos.agp.components.TextField;
-import ohos.agp.window.dialog.ToastDialog;
-
 import java.util.regex.Pattern;
 
+/**
+ * Long Form Ability Slice of sample app.
+ */
 public class LongFormSlice extends AbilitySlice {
 
 

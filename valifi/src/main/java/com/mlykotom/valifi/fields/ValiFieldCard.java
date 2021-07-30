@@ -3,9 +3,9 @@ package com.mlykotom.valifi.fields;
 import com.mlykotom.valifi.ValiFi;
 import com.mlykotom.valifi.ValiFiCardType;
 import com.mlykotom.valifi.fields.number.ValiFieldLong;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.Set;
 
 /**
  * ValiFieldCard class for card validation.
